@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌸 五一宝宝出游计划 · 成都周边</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 25%, #ffeaa7 50%, #dfe6e9 100%);
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .container { max-width: 960px; margin: 0 auto; }
+
+  /* 头部 */
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    background: linear-gradient(135deg, #ff6b9d 0%, #ffa07a 50%, #ffcc44 100%);
+    border-radius: 24px;
+    color: white;
+    margin-bottom: 24px;
+    box-shadow: 0 12px 40px rgba(255, 107, 157, 0.35);
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: ""; position: absolute; top: -50px; right: -50px;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+  }
+  .header::after {
+    content: ""; position: absolute; bottom: -60px; left: -30px;
+    width: 160px; height: 160px; border-radius: 50%;
+    background: rgba(255,255,255,0.10);
+  }
+  .header-emoji { font-size: 52px; margin-bottom: 10px; display: block; }
+  .header h1 { font-size: 26px; font-weight: 800; letter-spacing: 2px; margin-bottom: 8px; }
+  .header p { font-size: 14px; opacity: 0.92; line-height: 1.7; }
+  .badges { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 14px; }
+  .badge {
+    background: rgba(255,255,255,0.25); border: 1.5px solid rgba(255,255,255,0.5);
+    border-radius: 50px; padding: 4px 13px; font-size: 13px; font-weight: 600;
+  }
+
+  /* 分区标题 */
+  .section-title {
+    font-size: 20px; font-weight: 800; color: #333;
+    margin: 28px 0 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  /* 类型切换 */
+  .type-tabs {
+    display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap;
+  }
+  .type-tab {
+    padding: 7px 16px; border-radius: 50px; font-size: 13px; font-weight: 700;
+    cursor: pointer; border: 2px solid #e0e0e0; background: white; color: #888;
+    transition: all 0.2s;
+  }
+  .type-tab.active { color: white; border-color: transparent; }
+
+  /* 景点网格 */
+  .dest-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+    margin-bottom: 16px;
+  }
+
+  .dest-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+  }
+  .dest-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.13); }
+
+  .dest-top {
+    padding: 18px 18px 12px;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .dest-icon-wrap {
+    width: 50px; height: 50px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; flex-shrink: 0;
+  }
+  .dest-title-block h3 { font-size: 16px; font-weight: 800; color: #1a1a1a; margin-bottom: 3px; }
+  .dest-title-block .sub { font-size: 12px; color: #aaa; }
+  .dest-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
+  .dtag {
+    padding: 2px 9px; border-radius: 50px; font-size: 11px; font-weight: 700;
+  }
+  .dtag-green { background: #e8f5e9; color: #2e7d32; }
+  .dtag-orange { background: #fff3e0; color: #e65100; }
+  .dtag-blue { background: #e3f2fd; color: #1565c0; }
+  .dtag-pink { background: #fce4ec; color: #c62828; }
+  .dtag-purple { background: #f3e5f5; color: #6a1b9a; }
+  .dtag-teal { background: #e0f2f1; color: #00695c; }
+
+  .dest-body { padding: 0 18px 16px; }
+  .dest-meta-row {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;
+  }
+  .dmt {
+    display: flex; align-items: center; gap: 4px;
+    background: #f8f9fa; border-radius: 8px; padding: 5px 9px;
+    font-size: 12px; color: #555; font-weight: 600;
+  }
+  .dmt-icon { font-size: 13px; }
+
+  .dest-desc { font-size: 13px; color: #555; line-height: 1.7; margin-bottom: 10px; }
+
+  .tips-box {
+    background: #fffbf0; border-left: 3px solid #ffbb33;
+    border-radius: 0 10px 10px 0; padding: 10px 12px;
+  }
+  .tips-box .tips-title { font-size: 12px; color: #e08900; font-weight: 800; margin-bottom: 5px; }
+  .tips-box li { font-size: 12px; color: #666; line-height: 1.8; list-style: none; padding-left: 12px; position: relative; }
+  .tips-box li::before { content: "·"; position: absolute; left: 0; color: #ffbb33; font-weight: 900; font-size: 14px; }
+
+  /* 收藏标签 */
+  .fav-badge {
+    position: absolute; top: 12px; right: 12px;
+    background: linear-gradient(135deg, #ff6b9d, #ff8e53);
+    color: white; border-radius: 50px; padding: 3px 10px;
+    font-size: 11px; font-weight: 700; box-shadow: 0 2px 8px rgba(255,107,157,0.4);
+  }
+
+  /* 日程 */
+  .day-tab-bar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .day-tab {
+    padding: 7px 16px; border-radius: 50px; font-size: 13px; font-weight: 700;
+    cursor: pointer; border: 2px solid #e0e0e0; background: white; color: #888;
+    transition: all 0.2s;
+  }
+  .day-tab.active { color: white; border-color: transparent; }
+
+  .day-schedule { display: none; }
+  .day-schedule.active { display: block; }
+
+  .sch-card {
+    background: white; border-radius: 20px; padding: 22px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+  }
+
+  .sch-header {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+    padding-bottom: 14px; border-bottom: 2px solid #f5f5f5;
+  }
+  .sch-badge { padding: 5px 14px; border-radius: 50px; color: white; font-size: 13px; font-weight: 700; }
+  .sch-header h3 { font-size: 17px; font-weight: 800; color: #222; }
+
+  .timeline { position: relative; }
+  .timeline::before {
+    content: ""; position: absolute; left: 22px; top: 0; bottom: 0;
+    width: 2px; background: linear-gradient(to bottom, #ff6b9d, #ffcc44, #74b9ff);
+  }
+  .tl-item { display: flex; gap: 14px; margin-bottom: 16px; }
+  .tl-dot {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 18px;
+    flex-shrink: 0; z-index: 1; box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  }
+  .tl-content { flex: 1; padding-top: 3px; }
+  .tl-time { font-size: 11px; color: #bbb; font-weight: 600; margin-bottom: 2px; }
+  .tl-title { font-size: 14px; font-weight: 800; color: #222; margin-bottom: 2px; }
+  .tl-detail { font-size: 13px; color: #666; line-height: 1.6; }
+  .tl-note {
+    display: inline-block; background: #fff3f8; color: #ff6b9d;
+    border-radius: 6px; padding: 2px 8px; font-size: 11px; font-weight: 700; margin-top: 4px;
+  }
+
+  /* 打包清单 */
+  .checklist-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 16px; margin-bottom: 30px;
+  }
+  .cl-card { background: white; border-radius: 18px; padding: 18px; box-shadow: 0 4px 14px rgba(0,0,0,0.07); }
+  .cl-card h3 { font-size: 15px; font-weight: 800; margin-bottom: 12px; display: flex; align-items: center; gap: 7px; padding-bottom: 10px; border-bottom: 2px solid #f5f5f5; }
+  .ci { display: flex; align-items: center; gap: 9px; padding: 7px 0; border-bottom: 1px solid #f9f9f9; font-size: 13px; color: #444; cursor: pointer; }
+  .ci:last-child { border-bottom: none; }
+  .cb { width: 19px; height: 19px; border-radius: 5px; border: 2px solid #ddd; flex-shrink: 0; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+  .cb.checked { background: #4caf50; border-color: #4caf50; }
+  .cb.checked::after { content: "✓"; color: white; font-size: 11px; font-weight: 800; }
+
+  /* 注意事项 */
+  .notice-box {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 20px; padding: 22px; color: white; margin-bottom: 30px;
+    box-shadow: 0 8px 28px rgba(102,126,234,0.38);
+  }
+  .notice-box h3 { font-size: 17px; font-weight: 800; margin-bottom: 16px; }
+  .notice-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; }
+  .ni { background: rgba(255,255,255,0.15); border-radius: 12px; padding: 13px; }
+  .ni h4 { font-size: 13px; font-weight: 800; margin-bottom: 5px; }
+  .ni p { font-size: 12px; opacity: 0.88; line-height: 1.6; }
+
+  .footer { text-align: center; padding: 20px; color: #aaa; font-size: 13px; }
+  .footer .heart { color: #ff6b9d; }
+
+  /* 颜色变量 */
+  .g1 { background: linear-gradient(135deg,#ff6b9d,#ff8e53); }
+  .g2 { background: linear-gradient(135deg,#667eea,#764ba2); }
+  .g3 { background: linear-gradient(135deg,#11998e,#38ef7d); }
+  .g4 { background: linear-gradient(135deg,#f093fb,#f5576c); }
+  .g5 { background: linear-gradient(135deg,#4facfe,#00f2fe); }
+  .g6 { background: linear-gradient(135deg,#ffeaa7,#f9a825); }
+  .g7 { background: linear-gradient(135deg,#a8edea,#fed6e3); }
+  .g8 { background: linear-gradient(135deg,#43e97b,#38f9d7); }
+
+  @media (max-width: 600px) {
+    .header h1 { font-size: 20px; }
+    .dest-grid { grid-template-columns: 1fr; }
+    .day-tab { font-size: 12px; padding: 6px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- 头部 -->
+  <div class="header">
+    <span class="header-emoji">🌿🚂🐼</span>
+    <h1>五一宝宝出游计划 · 升级版</h1>
+    <p>成都周边 · 1岁女宝宝专属 · 可推婴儿车 · 轻松不累 · 当天往返</p>
+    <div class="badges">
+      <span class="badge">📅 五一假期 2026</span>
+      <span class="badge">👶 1岁宝宝友好</span>
+      <span class="badge">🚗 开车2小时内</span>
+      <span class="badge">🛒 全程推婴儿车</span>
+      <span class="badge">🎡 轻松互动型</span>
+    </div>
+  </div>
+
+  <!-- ===== 你喜欢的类型 ===== -->
+  <div class="section-title">❤️ 你喜欢的风格 · 同类推荐</div>
+  <p style="color:#888;font-size:13px;margin-bottom:16px;line-height:1.7">参考你提到的三个地方（崇州无根山、麓湖公园、彭州狮子山），这里列出 <strong style="color:#ff6b9d">8个同类型宝藏</strong>，按「轻松型」「自然型」分组 👇</p>
+
+  <!-- 分组A：轻松互动型 -->
+  <div class="section-title" style="font-size:17px;margin-top:10px">🎡 A组 · 轻松互动型（小火车/无动力乐园/亲子设施）</div>
+  <div class="dest-grid">
+
+    <!-- 1. 崇州无根山竹艺公园 -->
+    <div class="dest-card">
+      <div class="fav-badge">❤️ 你提到</div>
+      <div class="dest-top">
+        <div class="dest-icon-wrap g3">🎋</div>
+        <div class="dest-title-block">
+          <h3>崇州无根山竹艺公园</h3>
+          <div class="sub">崇州市道明镇 · 国内网红竹主题公园</div>
+          <div class="dest-tags">
+            <span class="dtag dtag-green">🚂 登云小火车</span>
+            <span class="dtag dtag-orange">🎪 无动力乐园</span>
+            <span class="dtag dtag-teal">🆓 免费入园</span>
+          </div>
+        </div>
+      </div>
+      <div class="dest-body">
+        <div class="dest-meta-row">
+          <span class="dmt"><span class="dmt-icon">🚗</span>约55km · 1h</span>
+          <span class="dmt"><span class="dmt-icon">🎫</span>免费（小火车30元/人）</span>
+          <span class="dmt"><span class="dmt-icon">⏱️</span>游览3-4h</span>
+        </div>
+        <p class="dest-desc">
+          公园免门票，坐"登云小火车"缓缓穿梭竹林是最大亮点（约20分钟，宝宝超喜欢！）。
+          还有8000㎡超大无动力乐园——竹叶滑索、秋千、蹦蹦床等50+玩法，熊猫餐厅出片感超强 🐼
+        </p>
+        <div class="tips-box">
+          <div class="tips-title">💡 宝妈Tips</div>
+          <ul>
+            <li>婴儿车在入口可免费寄存，乘小火车上山后推车下山路线全程可走公路（平坦无台阶）</li>
+            <li>无动力乐园有宝宝低幼区，1岁刚好能玩蹦蹦床和沙池</li>
+            <li>停车10元/辆，关注公众号可免费预约入园</li>
+            <li>五一建议工作日去，周末人多；带好零食和水</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. 成都麓湖·麓森+南岸公园 -->
+    <div class="dest-card">
+      <div class="fav-badge">❤️ 你提到</div>
+      <div class="dest-top">
+        <div class="dest-icon-wrap g5">🌊</div>
+        <div class="dest-title-block">
+          <h3>成都麓湖·麓森&南岸公园</h3>
+          <div class="sub">天府新区·麓湖生态区 · 2025年新开</div>
+          <div class="dest-tags">
+            <span class="dtag dtag-blue">🕊️ 鸟巢蹦床</span>
+            <span class="dtag dtag-green">🌳 树屋滑梯</span>
+            <span class="dtag dtag-teal">🆓 完全免费</span>
+          </div>
+        </div>
+      </div>
+      <div class="dest-body">
+        <div class="dest-meta-row">
+          <span class="dmt"><span class="dmt-icon">🚗</span>市区内·20-40分钟</span>
+          <span class="dmt"><span class="dmt-icon">🎫</span>完全免费</span>
+          <span class="dmt"><span class="dmt-icon">⏱️</span>游览2-3h</span>
+        </div>
+        <p class="dest-desc">
+          成都最火的免费遛娃新地标！麓森+南岸两公园无缝衔接。
+          配备树屋、蝴蝶攀爬架、<strong>鸟巢蹦蹦床</strong>、丛林穿越、吊床、音乐喷泉⛲
+          推车道路全程平整，还有沙滩和小溪，1岁宝宝看喷泉就能玩很久！
+        </p>
+        <div class="tips-box">
+          <div class="tips-title">💡 宝妈Tips</div>
+          <ul>
+            <li>步道全程平整开阔，婴儿车毫无障碍，新公园设计非常人性化</li>
+            <li>旁边麓湖CPI商业街可吃饭，环境好，宝宝也友好</li>
+            <li>五一人会多，建议工作日9点前去，停车免费</li>
+            <li>带帽子防晒，草坪区域阳光直射</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. 锦江公园·亲水无动力乐园 -->
+    <div class="dest-card">
+      <div class="dest-top">
+        <div class="dest-icon-wrap g8">🎠</div>
+        <div class="dest-title-block">
+          <h3>锦江公园·亲水无动力乐园</h3>
+          <div class="sub">锦江区·成都市区 · 2026年新开</div>
+          <div class="dest-tags">
+            <span class="dtag dtag-blue">💧 亲水设施</span>
+            <span class="dtag dtag-orange">👶 低幼友好区</span>
+            <span class="dtag dtag-teal">🆓 完全免费</span>
+          </div>
+        </div>
+      </div>
+      <div class="dest-body">
+        <div class="dest-meta-row">
+          <span class="dmt"><span class="dmt-icon">🚗</span>市区·10-20分钟</span>
+          <span class="dmt"><span class="dmt-icon">🎫</span>完全免费</span>
+          <span class="dmt"><span class="dmt-icon">⏱️</span>游览1.5-2h</span>
+        </div>
+        <p class="dest-desc">
+          成都最新开放的城市亲子乐园，专为低龄宝宝设计了独立低幼区 🎪
+          软胶+沙池地面保护宝宝安全，涵盖体能训练区、大童挑战区。
+          全程地面安全软化处理，婴儿车可全园推行，路程近适合状态不确定时的随机出行！
+        </p>
+        <div class="tips-box">
+          <div class="tips-title">💡 宝妈Tips</div>
+          <ul>
+            <li>1岁宝宝重点玩低幼区沙池和感统设施，互动性很强</li>
+            <li>地面全软胶处理，宝宝摔倒不怕</li>
+            <li>早上温度舒适，是周内遛娃首选</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. 新津·花舞人间亲子乐园（含小火车） -->
+    <div class="dest-card">
+      <div class="dest-top">
+        <div class="dest-icon-wrap g6">🌼</div>
+        <div class="dest-title-block">
+          <h3>新津·天府农博·亲子乐园</h3>
+          <div class="sub">新津区 · 田园亲子+小火车体验</div>
+          <div class="dest-tags">
+            <span class="dtag dtag-green">🌾 田园风光</span>
+            <span class="dtag dtag-orange">🚂 观光小火车</span>
+            <span class="dtag dtag-blue">🐑 萌宠互动</span>
+          </div>
+        </div>
+      </div>
+      <div class="dest-body">
+        <div class="dest-meta-row">
+          <span class="dmt"><span class="dmt-icon">🚗</span>约40km · 50分钟</span>
+          <span class="dmt"><span class="dmt-icon">🎫</span>部分区域免费</span>
+          <span class="dmt"><span class="dmt-icon">⏱️</span>游览2-3h</span>
+        </div>
+        <p class="dest-desc">
+          开阔田园风光，有观光小火车环绕田间行驶，宝宝在车上能看各类农作物和小动物 🐑
+          场地宽阔平坦，全程推婴儿车游览无障碍，节奏舒缓不累人。
+          还有萌宠区可以喂小羊、兔子，1岁宝宝初次见小动物超兴奋！
+        </p>
+        <div class="tips-box">
+          <div class="tips-title">💡 宝妈Tips</div>
+          <ul>
+            <li>带好防晒，田间空旷阳光强</li>
+            <li>周边有农家乐，午餐吃新津老字号肥肠粉</li>
+            <li>停车方便，周末人不多</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 分组B：自然亲子型 -->
+  <div class="section-title" style="font-size:17px;margin-top:6px">🌿 B组 · 自然轻松型（绿道/公园/山野）</div>
+  <div class="dest-grid">
+
+    <!-- 5. 彭州狮子山小环线 -->
+    <div class="dest-card">
+      <div class="fav-badge">❤️ 你提到</div>
+      <div class="dest-top">
+        <div class="dest-icon-wrap g2">🏔️</div>
+        <div class="dest-title-block">
+          <h3>彭州狮子山小环线</h3>
+          <div class="sub">彭州市·海窝子古镇对面 · 魔幻森林</div>
+          <div class="dest-tags">
+            <span class="dtag dtag-green">🌲 原始森林</span>
+            <span class="dtag dtag-blue">🥾 初级徒步</span>
+            <span class="dtag dtag-teal">🆓 免费进入</span>
+          </div>
+        </div>
+      </div>
+      <div class="dest-body">
+        <div class="dest-meta-row">
+          <span class="dmt"><span class="dmt-icon">🚗</span>约65km · 1-1.5h</span>
+          <span class="dmt"><span class="dmt-icon">📏</span>小环线约7.5km</span>
+          <span class="dmt"><span class="dmt-icon">⏱️</span>游览3-4h</span>
+        </div>
+        <p class="dest-desc">
+          被称为"魔幻森林"的网红徒步路线，植被茂密、空气绝佳！
+          ⚠️ 小环线部分路段有土路和小坡，<strong>婴儿车建议换背带或婴儿背架</strong>，由家人轮流背宝宝。
+          宝宝在背带里听鸟鸣、感受山间微风，是一次很棒的自然启蒙体验 🌿
+        </p>
+        <div class="tips-box">
+          <div class="tips-title">💡 宝妈Tips</div>
+          <ul>
+            <li>婴儿背架/背带必备，路况不适合推婴儿车，建议轮流背娃</li>
+            <li>五一山里气温比市区低5-8度，给宝宝备好外套和防风衣</li>
+            <li>海拔约1000米，1岁宝宝完全适应，呼吸新鲜空气很棒</li>
+            <li>行前先查天气，避开雨天（路面湿滑）</li>
+            <li>海窝子古镇可停车+午餐，氛围很好</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. 崇州桤木河湿地公园 -->
+    <div class="dest-card">
+      <div class="dest-top">
+        <div class="dest-icon-wrap g3">🦢</div>
+        <div class="dest-title-block">
+          <h3>崇州桤木河湿地公园</h3>
+          <div class="sub">崇州市 · 连无根山竹艺公园可两点一线</div>
+          <div class="dest-tags">
+            <span class="dtag dtag-green">🌊 湿地水景</span>
+            <span class="dtag dtag-blue">🦢 赏鸟观鱼</span>
+            <span class="dtag dtag-teal">🆓 完全免费</span>
+          </div>
+        </div>
+      </div>
+      <div class="dest-body">
+        <div class="dest-meta-row">
+          <span class="dmt"><span class="dmt-icon">🚗</span>约55km · 1h</span>
+          <span class="dmt"><span class="dmt-icon">🎫</span>完全免费</span>
+          <span class="dmt"><span class="dmt-icon">⏱️</span>游览1.5-2h</span>
+        </div>
+        <p class="dest-desc">
+          天府绿道崇州段精华，栈道沿湿地蜿蜒，白鹭飞翔、湖光倒影，绝美如画 🦢
+          全程硬化平坦栈道，<strong>婴儿车全程可推</strong>，宝宝看水、看鸟超开心。
+          离无根山竹艺公园只有几公里，两者可当天组合，超高性价比！
+        </p>
+        <div class="tips-box">
+          <div class="tips-title">💡 宝妈Tips</div>
+          <ul>
+            <li>可与无根山竹艺公园组合成一日游（先湿地散步，再上山坐小火车）</li>
+            <li>清晨鸟类最活跃，宝宝看白鹭飞翔会很兴奋</li>
+            <li>带好驱蚊液，湿地蚊虫稍多</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. 天府新区·兴隆湖湿地公园 -->
+    <div class="dest-card">
+      <div class="dest-top">
+        <div class="dest-icon-wrap g5">🏞️</div>
+        <div class="dest-title-block">
+          <h3>天府新区·兴隆湖湿地公园</h3>
+          <div class="sub">天府新区 · 城市湖泊生态公园</div>
+          <div class="dest-tags">
+            <span class="dtag dtag-blue">🌊 湖景步道</span>
+            <span class="dtag dtag-green">🌾 亲子草坪</span>
+            <span class="dtag dtag-teal">🆓 完全免费</span>
+          </div>
+        </div>
+      </div>
+      <div class="dest-body">
+        <div class="dest-meta-row">
+          <span class="dmt"><span class="dmt-icon">🚗</span>市区南部·25-40分钟</span>
+          <span class="dmt"><span class="dmt-icon">🎫</span>完全免费</span>
+          <span class="dmt"><span class="dmt-icon">⏱️</span>游览2-3h</span>
+        </div>
+        <p class="dest-desc">
+          成都最大的人工湖公园之一，湖岸线绵延，草坪开阔连片 🌿
+          全程沥青步道，婴儿车轻松推行，适合下午推车散步+野餐。
+          宝宝看鱼、看水、闻花香，环境干净清新，旁边就是鹿溪智谷，也很出片 📸
+        </p>
+        <div class="tips-box">
+          <div class="tips-title">💡 宝妈Tips</div>
+          <ul>
+            <li>草坪区可铺防潮垫野餐，带点宝宝玩的软球</li>
+            <li>旁边科学城商业配套完善，餐饮方便</li>
+            <li>五一早晚凉爽，下午3点后最舒适</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. 温江·绿道骑行+萌宠庄园 -->
+    <div class="dest-card">
+      <div class="dest-top">
+        <div class="dest-icon-wrap g4">🐑</div>
+        <div class="dest-title-block">
+          <h3>温江·花木世界+萌宠互动</h3>
+          <div class="sub">温江区 · 成都花木之乡</div>
+          <div class="dest-tags">
+            <span class="dtag dtag-orange">🐑 萌宠喂食</span>
+            <span class="dtag dtag-green">🌺 花海观赏</span>
+            <span class="dtag dtag-blue">🛒 推车友好</span>
+          </div>
+        </div>
+      </div>
+      <div class="dest-body">
+        <div class="dest-meta-row">
+          <span class="dmt"><span class="dmt-icon">🚗</span>约30km · 35-45分钟</span>
+          <span class="dmt"><span class="dmt-icon">🎫</span>部分免费</span>
+          <span class="dmt"><span class="dmt-icon">⏱️</span>游览2-3h</span>
+        </div>
+        <p class="dest-desc">
+          成都"花都"温江，有众多亲子萌宠庄园和花木基地 🌺
+          可以喂小羊、兔子、迷你猪等萌宠，地面全平坦，推婴儿车全程无障碍。
+          1岁宝宝第一次近距离摸小动物，保证笑出声 😂 离成都市区近，随时可撤！
+        </p>
+        <div class="tips-box">
+          <div class="tips-title">💡 宝妈Tips</div>
+          <ul>
+            <li>建议出发前搜索温江当季推荐农庄（五一期间有活动）</li>
+            <li>喂动物前给宝宝手部消毒，注意卫生</li>
+            <li>可结合温江绿道骑行（租婴儿骑行拖车）</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== 5天日程 ===== -->
+  <div class="section-title">📅 推荐五天日程安排</div>
+
+  <div class="day-tab-bar">
+    <div class="day-tab active" onclick="switchDay(0)" id="tab0">5/1 周四</div>
+    <div class="day-tab" onclick="switchDay(1)" id="tab1">5/2 周五</div>
+    <div class="day-tab" onclick="switchDay(2)" id="tab2">5/3 周六</div>
+    <div class="day-tab" onclick="switchDay(3)" id="tab3">5/4 周日</div>
+    <div class="day-tab" onclick="switchDay(4)" id="tab4">5/5 周一</div>
+  </div>
+
+  <!-- Day 1 -->
+  <div class="day-schedule active" id="day0">
+    <div class="sch-card">
+      <div class="sch-header">
+        <div class="sch-badge g1">5月1日 劳动节</div>
+        <h3>🐼 成都大熊猫基地（必去！人最多先打卡）</h3>
+      </div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot g6">🌅</div>
+          <div class="tl-content">
+            <div class="tl-time">07:00 出发</div>
+            <div class="tl-title">提前出发 · 开门即入</div>
+            <div class="tl-detail">五一节人最多，7:30准时入园，趁早上熊猫最活跃。提前预约好票，周边道路需提前预约通行。</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot g3">🐼</div>
+          <div class="tl-content">
+            <div class="tl-time">07:30 - 10:30</div>
+            <div class="tl-title">熊猫基地游览</div>
+            <div class="tl-detail">从西门进入，月亮产房→日照别墅→成长园，全程推婴儿车游览。宝宝看大熊猫翻滚，肯定笑个不停！</div>
+            <span class="tl-note">⚠️ 官网/小程序提前购票+实名预约</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot g4">🍼</div>
+          <div class="tl-content">
+            <div class="tl-time">10:30 - 11:00</div>
+            <div class="tl-title">园内休息 · 宝宝喂奶</div>
+            <div class="tl-detail">基地设有母婴室，喂奶换尿布都方便，休息好再出发。</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot g5">🍜</div>
+          <div class="tl-content">
+            <div class="tl-time">11:30 - 13:00</div>
+            <div class="tl-title">午餐 + 宝宝午睡</div>
+            <div class="tl-detail">就近吃饭，饭后在车里开空调让宝宝睡午觉，妈妈也好好休息。</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot g8">🌊</div>
+          <div class="tl-content">
+            <div class="tl-time">下午 自由活动</div>
+            <div class="tl-title">下午：锦江公园/兴隆湖散步</div>
+            <div class="tl-detail">就近去兴隆湖或青龙湖推车散步，宝宝补充户外时光，妈妈轻松收假期第一天。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 2 -->
+  <div class="day-schedule" id="day1">
+    <div class="sch-card">
+      <div class="sch-header">
+        <div class="sch-badge g3">5月2日 周五</div>
+        <h3>🎋 崇州无根山竹艺公园 + 桤木河湿地（一日两点）</h3>
+      </div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot g6">☀️</div>
+          <div class="tl-content">
+            <div class="tl-time">08:30 出发</div>
+            <div class="tl-title">出发前往崇州</div>
+            <div class="tl-detail">走成温邛高速，约1小时到崇州道明镇。先去桤木河湿地晨走，清晨鸟类活跃最好看。</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot g3">🦢</div>
+          <div class="tl-content">
+            <div class="tl-time">09:30 - 10:30</div>
+            <div class="tl-title">桤木河湿地散步</div>
+            <div class="tl-detail">平坦栈道推婴儿车游览，看白鹭、听鸟鸣，宝宝耳朵超灵敏，一定会被鸟叫吸引 🦢</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot g1">🎋</div>
+          <div class="tl-content">
+            <div class="tl-time">11:00 - 14:00</div>
+            <div class="tl-title">无根山竹艺公园</div>
+            <div class="tl-detail">坐登云小火车上山（婴儿车寄存入口），下山走公路推车。中午在熊猫餐厅吃饭，下午逛无动力乐园，宝宝玩低幼蹦床和沙池！</div>
+            <span class="tl-note">🚂 小火车30元/人 · 关注公众号预约免门票</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot g2">😴</div>
+          <div class="tl-content">
+            <div class="tl-time">14:00 - 15:30</div>
+            <div class="tl-title">宝宝午睡 · 驾车返程</div>
+            <div class="tl-detail">让宝宝在安全座椅上睡觉，趁机开车返回成都，约1小时到家。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 3 -->
+  <div class="day-schedule" id="day2">
+    <div class="sch-card">
+      <div class="sch-header">
+        <div class="sch-badge g5">5月3日 周六</div>
+        <h3>🌊 成都麓湖·麓森公园（免费亲子公园半日游）</h3>
+      </div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot g6">☀️</div>
+          <div class="tl-content">
+            <div class="tl-time">09:00 出发</div>
+            <div class="tl-title">悠闲出发·路近不着急</div>
+            <div class="tl-detail">麓湖在天府新区，市区南边驾车30分钟内可达，不用早起，让宝宝睡饱再走。</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot g5">🌊</div>
+          <div class="tl-content">
+            <div class="tl-time">09:30 - 12:00</div>
+            <div class="tl-title">麓森+南岸公园游览</div>
+            <div class="tl-detail">推婴儿车在两园之间逛，宝宝坐喷泉旁边看水、玩沙坑、蹬蹦蹦床，妈妈坐草坪上晒太阳发呆。拍照超出片 📸</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot g1">🍽️</div>
+          <div class="tl-content">
+            <div class="tl-time">12:00 - 13:30</div>
+            <div class="tl-title">麓湖CPI午餐</div>
+            <div class="tl-detail">麓湖CPI商业街餐饮选择丰富，环境优雅，亲子友好，喝个咖啡、吃个轻食，下午精力满满。</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot g4">😴</div>
+          <div class="tl-content">
+            <div class="tl-time">13:30 下午</div>
+            <div class="tl-title">午后轻松返家</div>
+            <div class="tl-detail">宝宝午睡时间，驾车20分钟回家，轻松不折腾，周六休息好迎接后面的行程。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 4 -->
+  <div class="day-schedule" id="day3">
+    <div class="sch-card">
+      <div class="sch-header">
+        <div class="sch-badge g2">5月4日 青年节</div>
+        <h3>🏔️ 彭州狮子山小环线（背着宝宝进山林！）</h3>
+      </div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot g6">🌅</div>
+          <div class="tl-content">
+            <div class="tl-time">07:30 出发</div>
+            <div class="tl-title">早起出发·备好背带</div>
+            <div class="tl-detail">彭州狮子山约1-1.5小时路程。此行宝宝坐婴儿背带或背架，由家人轮流背，婴儿车可放车上不带。</div>
+            <span class="tl-note">🎒 婴儿背架/背带 必备！</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot g3">🌲</div>
+          <div class="tl-content">
+            <div class="tl-time">09:00 - 12:30</div>
+            <div class="tl-title">狮子山小环线徒步</div>
+            <div class="tl-detail">小环线约7.5km，家人背宝宝交替前行。原始森林、鸟鸣虫叫，宝宝在背架上眼睛转个不停，呼吸最棒的山间空气 🌿</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot g4">🍲</div>
+          <div class="tl-content">
+            <div class="tl-time">13:00 - 14:30</div>
+            <div class="tl-title">海窝子古镇午餐</div>
+            <div class="tl-detail">古镇有众多特色餐厅，喝彭州羊肉汤、吃凉拌菜，体力充分恢复。</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot g5">🏠</div>
+          <div class="tl-content">
+            <div class="tl-time">15:00 返程</div>
+            <div class="tl-title">宝宝睡觉·驾车回家</div>
+            <div class="tl-detail">徒步消耗大，宝宝一上车就睡，约1小时到家，早点休息。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 5 -->
+  <div class="day-schedule" id="day4">
+    <div class="sch-card">
+      <div class="sch-header">
+        <div class="sch-badge g4">5月5日 收假日</div>
+        <h3>🌺 三圣花乡 or 温江萌宠庄园（轻松收尾）</h3>
+      </div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot g6">☀️</div>
+          <div class="tl-content">
+            <div class="tl-time">09:30 出发</div>
+            <div class="tl-title">最后一天·完全放松</div>
+            <div class="tl-detail">选就近的地方，不赶路。三圣花乡（市郊20分钟）或温江萌宠庄园（30-40分钟）二选一。</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot g1">🐑</div>
+          <div class="tl-content">
+            <div class="tl-time">10:00 - 12:30</div>
+            <div class="tl-title">花海/萌宠半日游</div>
+            <div class="tl-detail">如选三圣花乡：五月花期正盛，推车赏花拍照，全家福大片到手 🌸<br>如选温江萌宠庄园：让宝宝喂喂小羊兔子，初次触摸小动物超难忘！</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot g3">🍽️</div>
+          <div class="tl-content">
+            <div class="tl-time">12:30 - 14:00</div>
+            <div class="tl-title">农家午饭</div>
+            <div class="tl-detail">就近找农家乐，吃时蔬炖汤，最后一顿好好补一下这5天消耗的能量。</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot g5">🏠</div>
+          <div class="tl-content">
+            <div class="tl-time">14:30 回家</div>
+            <div class="tl-title">提前返家·收假准备</div>
+            <div class="tl-detail">早点回家洗澡，整理5天的出行照片，剪个小视频纪念宝宝的第一个五一！🎬 明天精神满满上班～</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 打包清单 ===== -->
+  <div class="section-title">🎒 出行打包清单</div>
+  <div class="checklist-grid">
+    <div class="cl-card">
+      <h3>👶 宝宝装备</h3>
+      <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>婴儿推车（可平躺款）</div>
+      <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>婴儿背带 / 背架（爬山必备）</div>
+      <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>安全座椅（车内全程使用）</div>
+      <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>推车遮阳棚 / 防晒罩</div>
+      <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>尿不湿 × 10片/天</div>
+      <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>备用衣物 × 3套</div>
+      <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>宝宝防晒帽</div>
+    </div>
+    <div class="cl-card">
+      <h3>🍼 喂养辅食</h3>
+      <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>奶瓶 + 消毒湿巾</div>
+      <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>奶粉（按量分装袋）</div>
+      <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>宝宝辅食袋/泥</div>
+      <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>磨牙棒 / 米饼</div>
+      <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>宝宝吸管水杯</div>
+      <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>妈妈保温杯</div>
+    </div>
+    <div class="cl-card">
+      <h3>💊 健康急救</h3>
+      <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>退烧药（备用）</div>
+      <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>肠胃益生菌</div>
+      <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>宝宝驱蚊液（天然型）</div>
+      <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>宝宝防晒霜（SPF30+）</div>
+      <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>薄外套（早晚备用）</div>
+      <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>创可贴 + 棉签</div>
+    </div>
+    <div class="cl-card">
+      <h3>📱 妈妈必备</h3>
+      <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>充电宝（20000mAh）</div>
+      <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>景区预约截图（离线存图）</div>
+      <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>车内零食 + 饮用水</div>
+      <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>湿巾（大人小孩通用）</div>
+      <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>宝宝玩具 / 安抚玩偶</div>
+      <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>手机稳定器（拍视频）</div>
+    </div>
+  </div>
+
+  <!-- 注意事项 -->
+  <div class="notice-box">
+    <h3>⚠️ 带1岁娃出行重要提示</h3>
+    <div class="notice-grid">
+      <div class="ni">
+        <h4>🎫 熊猫基地必须预约</h4>
+        <p>五一实行限流+机动车预约通行，需提前3天通过官方小程序购票预约时段，别漏了！</p>
+      </div>
+      <div class="ni">
+        <h4>🧗 爬山备婴儿背架</h4>
+        <p>彭州狮子山路况不适合推婴儿车，务必带婴儿背架或背带，家人轮流背娃，别忘了多带水！</p>
+      </div>
+      <div class="ni">
+        <h4>⏰ 以宝宝状态为准</h4>
+        <p>宝宝烦躁或发烧立即停止行程。不强求走完全程，行程留足弹性，玩半天回家也很完美。</p>
+      </div>
+      <div class="ni">
+        <h4>☀️ 五一注意防晒</h4>
+        <p>成都五一日照已经很强，11:00-14:00避开正午高温，宝宝戴帽、推车加遮阳棚。</p>
+      </div>
+      <div class="ni">
+        <h4>🌡️ 山区温差大</h4>
+        <p>去彭州/崇州山区气温比市区低5-8度，宝宝多备一件薄外套，防着凉。</p>
+      </div>
+      <div class="ni">
+        <h4>🚗 开车安全第一</h4>
+        <p>宝宝全程安全座椅，不可抱娃开车。五一高速可能堵车，提前下载离线导航地图。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>🌸 五一快乐！宝宝第一次看大熊猫、坐小火车、进山林——每一个都是珍贵的第一次 <span class="heart">❤️</span></p>
+    <p style="margin-top:6px;font-size:12px">📍 成都周边亲子游 · 2026五一 · 1岁宝宝专属版</p>
+  </div>
+
+</div>
+
+<script>
+  const tabColors = [
+    'linear-gradient(135deg,#ff6b9d,#ff8e53)',
+    'linear-gradient(135deg,#11998e,#38ef7d)',
+    'linear-gradient(135deg,#4facfe,#00f2fe)',
+    'linear-gradient(135deg,#667eea,#764ba2)',
+    'linear-gradient(135deg,#f093fb,#f5576c)'
+  ];
+
+  function switchDay(i) {
+    document.querySelectorAll('.day-tab').forEach((t, idx) => {
+      if (idx === i) {
+        t.style.background = tabColors[idx]; t.style.color = 'white'; t.style.borderColor = 'transparent'; t.classList.add('active');
+      } else {
+        t.style.background = 'white'; t.style.color = '#888'; t.style.borderColor = '#e0e0e0'; t.classList.remove('active');
+      }
+    });
+    document.querySelectorAll('.day-schedule').forEach((s, idx) => s.classList.toggle('active', idx === i));
+  }
+  // 初始化第一个tab颜色
+  window.addEventListener('DOMContentLoaded', () => {
+    const t = document.getElementById('tab0');
+    t.style.background = tabColors[0]; t.style.color = 'white'; t.style.borderColor = 'transparent';
+  });
+
+  function toggleCheck(item) {
+    item.querySelector('.cb').classList.toggle('checked');
+  }
+</script>
+</body>
+</html>
